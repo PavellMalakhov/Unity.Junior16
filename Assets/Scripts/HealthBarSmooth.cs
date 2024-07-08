@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class HealthBarSmooth : EventHandler
 {
@@ -7,13 +8,22 @@ public class HealthBarSmooth : EventHandler
 
     private float _targetHealth;
 
-    private void Update()
-    {
-        _slider.value = Mathf.MoveTowards(_slider.value, _targetHealth, Time.deltaTime);
-    }
-
     protected override void RenderHealh(float health, float healthMax)
     {
         _targetHealth = health / healthMax;
+
+        StartCoroutine(SmoothRenderHealh(_targetHealth));
+    }
+
+    private IEnumerator SmoothRenderHealh(float targetHealth)
+    {
+        var wait = new WaitForEndOfFrame();
+
+        while (_slider.value != targetHealth)
+        {
+            _slider.value = Mathf.MoveTowards(_slider.value, targetHealth, Time.deltaTime);
+
+            yield return wait;
+        }
     }
 }

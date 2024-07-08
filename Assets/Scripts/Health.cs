@@ -3,7 +3,7 @@ using System;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] private float _health = 100f;
+    [SerializeField] private float _healthCurrent = 100f;
     [SerializeField] private float _healthMax = 100f;
     [SerializeField] private float _healthMin = 0f;
 
@@ -11,23 +11,23 @@ public class Health : MonoBehaviour
 
     private void Start()
     {
-        HealthChanged?.Invoke(_health, _healthMax);
+        HealthChanged?.Invoke(_healthCurrent, _healthMax);
     }
 
     public void AddHealth(float amountHealth)
     {
         if (amountHealth > _healthMin)
         {
-            _health = Mathf.Clamp(_health += amountHealth, _healthMin, _healthMax);
+            _healthCurrent = Mathf.Clamp(_healthCurrent += amountHealth, _healthMin, _healthMax);
 
-            HealthChanged?.Invoke(_health, _healthMax);
+            HealthChanged?.Invoke(_healthCurrent, _healthMax);
         }
     }
 
     public void TakeDamage(float damage)
     {
-        _health = Mathf.Clamp(_health -= damage, _healthMin, _healthMax);
+        _healthCurrent = Mathf.Clamp(_healthCurrent -= damage, _healthMin, _healthMax);
 
-        HealthChanged?.Invoke(_health, _healthMax);
+        HealthChanged?.Invoke(_healthCurrent, _healthMax);
     }
 }
